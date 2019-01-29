@@ -33,3 +33,20 @@ let anotherScore : score = Forty({player: PlayerTwo, otherPlayerPoint:Thirty });
 let impossibleScore1 : score = Points({playerOne: Seven, playerTwo: Eleven});
 let impossibleScore2 : score = Points({playerOne: Forty, playerTwo: Forty});
 let impossibleScore3 : score = Forty({player: PlayerTwo, otherPlayerPoint:Forty });
+
+let score = (current, winner) =>
+  switch current {
+  | Points(p) => scoreWhenPoints(p, winner)
+  | Forty(f) => scoreWhenForty(f, winner)
+  | Deuce => scoreWhenDeuce(winner)
+  | Advantage(a) => scoreWhenAdvantage(a, winner)
+  | Game(g) => scoreWhenGame(g)
+  };
+  let scoreWhenGame = winner => Game(winner);
+  let scoreWhenGame = winner => Game(winner);
+
+let string_of_player /*todo*/;
+let string_of_point/*todo */;
+let string_of_score/*todo */;
+  /*Develop 3 functions : string_of_player, string_of_point, 
+  string_of_score that return string from a data of type player, point or score. */
