@@ -107,11 +107,17 @@ let score = (current, winner) =>
   };
   print_endline(string_of_point(Love));
 
-  /*let string_of_score=score => switch(score){
-  |
-  |
-  |
-    };/*todo */;*/
-  /*Develop 3 functions : string_of_player, string_of_point, 
-  string_of_score that return string from a data of type player, point or score. */
- 
+  let string_of_score= score => switch(score){
+  | Points(pts) => string_of_point(pts.playerOne) ++ "-" ++ string_of_point(pts.playerTwo)
+  | Forty(fd) => fd.player == PlayerOne ? "Forty-" ++ string_of_point(fd.otherPlayerPoint): string_of_point(fd.otherPlayerPoint) ++ "-Forty"
+  | Deuce => "Deuce"
+  | Advantage(p) => "Advantage " ++ string_of_player(p)
+  | Game(p) => "Game " ++ string_of_player(p);
+    };
+    print_endline(string_of_score(Forty{player: PlayerOne, otherPlayerPoint:Thirty }));
+    print_endline(string_of_score(Deuce));
+    print_endline(string_of_score(Advantage(PlayerOne)));
+    print_endline(string_of_score(Game(PlayerOne)));
+    print_endline(string_of_score(Points{playerOne: Love,playerTwo:Thirty }));
+
+
