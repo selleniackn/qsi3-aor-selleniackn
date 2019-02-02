@@ -16,6 +16,7 @@ type fortyData = {
   player: player, /* The player who have forty points */
   otherPlayerPoint: point
 };
+
 let fd : fortyData = {player: PlayerOne, otherPlayerPoint: Love};
 
 type score =
@@ -25,14 +26,61 @@ type score =
 | Advantage(player)
 | Game(player);
 
-let startScore : score = Points({playerOne: Love, playerTwo: Love});
 
-let anotherScore : score = Forty({player: PlayerTwo, otherPlayerPoint:Thirty });
+let scoreWhenDeuce: player => score = winner => Advantage(winner);
+let scoreWhenAdvantage: (player, player) => score =
+  (advantagedPlayer, winner) =>
+    advantagedPlayer == winner ? Game(winner) : Deuce;
+/* This time we infer that the function type is (player) => player */
+let other = player =>
+  switch player {
+  | PlayerOne => PlayerTwo
+  | PlayerTwo => PlayerOne
+  };
+let scoreWhenForty = (current, winner) => Game(winner);
+let scoreWhenForty = (current, winner) =>
+  current.player == winner ? Game(winner) : Deuce;
+/* We add a tool function to increment point */
+let incrementPoint: point => option(point) =
+  point =>
+    switch point {
+    | Love => Some(Fifteen)
+    | Fifteen => Some(Thirty)
+    | Thirty => None
+    };
 
-/* All exemple above don't work */
-let impossibleScore1 : score = Points({playerOne: Seven, playerTwo: Eleven});
-let impossibleScore2 : score = Points({playerOne: Forty, playerTwo: Forty});
-let impossibleScore3 : score = Forty({player: PlayerTwo, otherPlayerPoint:Forty });
+let scoreWhenForty = (current, winner) =>
+  current.player == winner ?
+    Game(winner) :
+    (
+      switch (incrementPoint(current.otherPlayerPoint)) {
+      | Some(p) => Forty({...current, otherPlayerPoint: p})
+      | None => Deuce
+      }
+    );
+let pointTo = (player, point, current) =>
+  switch player {
+  | PlayerOne => {...current, playerOne: point}
+  | PlayerTwo => {...current, playerTwo: point}
+  };
+
+let pointFor = (player, current) =>
+  switch player {
+  | PlayerOne => current.playerOne
+  | PlayerTwo => current.playerTwo
+  };
+
+let scoreWhenPoints = (current, winner) =>
+  switch (current |> pointFor(winner) |> incrementPoint) {
+  | Some(np) => Points(pointTo(winner, np, current))
+  | None =>
+    Forty({
+      player: winner,
+      otherPlayerPoint: current |> pointFor(other(winner))
+    })
+  };
+let scoreWhenGame = winner => Game(winner);
+let newGame = Points({playerOne: Love, playerTwo: Love});
 
 let score = (current, winner) =>
   switch current {
@@ -43,10 +91,27 @@ let score = (current, winner) =>
   | Game(g) => scoreWhenGame(g)
   };
   let scoreWhenGame = winner => Game(winner);
-  let scoreWhenGame = winner => Game(winner);
+  let newGame = Points({playerOne: Love, playerTwo: Love});
 
-let string_of_player /*todo*/;
-let string_of_point/*todo */;
-let string_of_score/*todo */;
+  let string_of_player= player => switch (player) {  
+| PlayerOne => "PlayerOne"
+| PlayerTwo => "PlayerTwo";
+  };
+  
+  print_endline(string_of_player(PlayerOne));
+  let string_of_point= point => switch(point){
+| Love => "Love"
+| Fifteen => "Fifteen"
+| Thirty => "Thirty";
+
+  };
+  print_endline(string_of_point(Love));
+
+  /*let string_of_score=score => switch(score){
+  |
+  |
+  |
+    };/*todo */;*/
   /*Develop 3 functions : string_of_player, string_of_point, 
   string_of_score that return string from a data of type player, point or score. */
+ 
