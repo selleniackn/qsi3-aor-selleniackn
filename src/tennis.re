@@ -100,16 +100,16 @@ let score = (current, winner) =>
   
   print_endline(string_of_player(PlayerOne));
   let string_of_point= point => switch(point){
-| Love => "Love"
-| Fifteen => "Fifteen"
-| Thirty => "Thirty";
+| Love => "0"
+| Fifteen => "15"
+| Thirty => "30";
 
   };
   print_endline(string_of_point(Love));
 
   let string_of_score= score => switch(score){
   | Points(pts) => string_of_point(pts.playerOne) ++ "-" ++ string_of_point(pts.playerTwo)
-  | Forty(fd) => fd.player == PlayerOne ? "Forty-" ++ string_of_point(fd.otherPlayerPoint): string_of_point(fd.otherPlayerPoint) ++ "-Forty"
+  | Forty(fd) => fd.player == PlayerOne ? "40-" ++ string_of_point(fd.otherPlayerPoint): string_of_point(fd.otherPlayerPoint) ++ "-40"
   | Deuce => "Deuce"
   | Advantage(p) => "Advantage " ++ string_of_player(p)
   | Game(p) => "Game " ++ string_of_player(p);
